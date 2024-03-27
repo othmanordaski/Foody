@@ -1,5 +1,5 @@
-🍽️ Foody: Triple Registry Triple Login Website
-Introduction
+# 🍽️ Foody: Triple Registry Triple Login Website
+## Introduction
 
 We have developed Foody, a triple registry triple login website, as a challenge to test our skills gained from a bootcamp and to create a fully functional MERN stack project. This website facilitates connections between clients, businesses, and delivery personnel, offering three distinct user experiences and corresponding code sections. Our platform integrates diverse technologies, ensuring scalability and adaptability across various industries.
 Website Overview
@@ -33,19 +33,19 @@ Technologies Used
     Compression (for compressing responses)
     And more...
 
-Endpoints/Routes
+## Endpoints/Routes
 
     Client Pages
     Restaurant/Business Pages
     Delivery Personnel Pages
     General Pages
 
-Entities/Schemas
+## Entities/Schemas
 
     Client User Entity
     Delivery Personnel Entity
     Restaurant Entity
 
-Conclusion
+## Conclusion
 
 Foody provides a comprehensive solution for connecting clients, businesses, and delivery personnel in a seamless and efficient manner. With its intuitive interfaces, robust features, and scalable architecture, Foody is poised to revolutionize the food delivery industry.
