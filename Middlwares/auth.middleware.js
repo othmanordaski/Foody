@@ -13,8 +13,8 @@ exports.isAuthenticated = (req, res, next) => {
         if (!verify) {
             return res.status(401).json({ message: 'Session not found. Please login again.' });
         }
-        //console.log(verify)
-        req.user = verify;
+        req.user= verify;
+        console.log(req.user)
         next();
     } catch (err) {
         console.error(err);
