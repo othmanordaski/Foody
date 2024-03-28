@@ -23,5 +23,3 @@ exports.connection = () => {
         connectToMongo,
     }
 }
-
-//M6QL7ZgULnEjtWRm
