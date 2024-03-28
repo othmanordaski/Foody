@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const {hashPassword} = require('../../Helpers/Hashing')
 
 const User = mongoose.Schema({
     username : {
@@ -7,7 +8,8 @@ const User = mongoose.Schema({
     },
     email : {
         type: 'string' ,
-        required : true 
+        required : true ,
+        unique : true
     },
     password : {
         type : 'string' ,
@@ -35,4 +37,21 @@ const User = mongoose.Schema({
     }
 })
 
+/*
+//pre-save to hash password before saving
+User.pre('save', async function(next) {
+    // Only hash the password if it's modified or new
+    if (!this.isModified('password')) {
+        return next();
+    }
+
+    try {
+        const hashedPassword = await hashPassword(this.password, 10);
+        this.password = hashedPassword;
+        next();
+    } catch (error) {
+        next(error);
+    }
+})
+*/
 module.exports = mongoose.model('users',User)
