@@ -54,9 +54,10 @@ exports.userLogin = async (req,res) => {
         const checked =await comparePassword(password,user.password)
         if(!checked) return res.status(400).json({message:"Incorrect Password"})
 
-        const token = await generateToken({user : user})
+        const token = await generateToken({user})
         res.status(200).cookie('tokenAuth',token).send('User logged successfuly')
     }catch(error){
         console.log('error' , error)
     }
+    
 }
