@@ -38,6 +38,22 @@ const User = mongoose.Schema({
 })
 
 /*
+User.pre('save', async function(next) {
+    // Check if password field is modified and is new
+    if (!this.isModified('password') || !this.isNew) {
+        return next();
+    }
+
+    try {
+        const hashedPassword = await hashPassword(this.password, 10);
+        this.password = hashedPassword;
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
+/*
 //pre-save to hash password before saving
 User.pre('save', async function(next) {
     // Only hash the password if it's modified or new
