@@ -1,28 +1,22 @@
 {
   "name": "foody",
   "version": "1.0.0",
-  "description": "🍽️ Foody: Triple Registry Triple Login Website Introduction",
-  "main": "arkx.js",
+  "description": "🍽️ Foody: Triple Registry Triple Login Website\r Introduction",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
-  "author": "othmane errouissat",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "cookie-parser": "^1.4.6",
-    "dotenv": "^16.4.5",
-    "emailjs": "^4.0.3",
-    "express": "^4.19.2",
-    "express-session": "^1.18.0",
+    "express": "^4.19.1",
     "express-validator": "^7.0.1",
-    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.3",
-    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.13",
-    "validator": "^13.11.0",
     "xss": "^1.0.15"
   },
   "devDependencies": {

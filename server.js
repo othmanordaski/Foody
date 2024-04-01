@@ -1,31 +1,36 @@
-require('dotenv').config()
+require('dotenv').config();
 
-const {server} = require('./config/config');
-const PORT = server.PORT
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000; // Set default port to 3000 if PORT environment variable is not defined
 
-const express = require('express')
-const app = express()
+// Import the database connection function
+const { connection } = require('./config/database');
+const database = connection();
 
-const resturant = require('./Routes/RestaurantRoute')
-const cookieParser = require('cookie-parser')
+// Middleware setup
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-//Import the database connection function 
-const {connection} = require('./config/database')
-const database = connection()
+// Connect to the MongoDB database
+database.connectToMongo();
 
-//Middleware setup
-app.use(cookieParser())
-app.use(express.json())
-app.use(express.urlencoded({extended : true}))
+// Import routes
+const restaurantRoutes = require('./Routes/RestaurantRoutes');
+const userRoutes = require('./routes/userRoutes'); // Corrected file path casing
 
-//Connect to the MongoDb databse
-database.connectToMongo()
+// Use routes
+app.use('/restaurant', restaurantRoutes);
+app.use('/client', userRoutes);
 
-const {default : mongoose} = require('mongoose')
+// Error handling middleware
+app.use((err, req, res, next) => {
+    // Handle errors and respond accordingly
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error' }); // Generic error response for demonstration
+});
 
-app.use('/restaurant',resturant)
-
-// Start the Express server and listen on port 3000
+// Start the Express server and listen on the specified port
 app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
