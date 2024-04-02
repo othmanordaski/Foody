@@ -18,7 +18,10 @@ exports.orderDetails = async (req,res) => {
         if(!order){
             res.status(404).send('Order not found')
         }
-        res.status(200).json(order)
+        const details = {
+            //order.(restau, items, deliveryAddress, status, totalPrice, notes)
+        }
+        res.status(200).json(details)
     }catch(error){
         res.status(500).send('Server Error')
     }
@@ -35,7 +38,7 @@ exports.updateOrder = async (req,res) => {
         if (!updatedOrder) {
             return res.status(404).json({ message: 'Order not found' })
         }
-
+        
         res.json(updatedOrder)
     } catch (error) {
         res.status(500).json('Server error')
