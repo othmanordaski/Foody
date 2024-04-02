@@ -3,6 +3,7 @@ const {sendEmail} = require('../Helpers/mailer')
 const {hashPassword,comparePassword} = require('../Helpers/Hashing')
 const {generateToken} = require('../Helpers/JWT')
 
+/*
 exports.renderRegister = (req,res) => {
     res.send('/register')
 }
@@ -10,17 +11,16 @@ exports.renderRegister = (req,res) => {
 exports.renderLogin = (req,res) => {
     res.send('/login')
 }
-
+*/
+//Register
 exports.registerUser = async (req,res) => {
     try{
-        const {email} = req.body;
-        //console.log(email)
+        const {username,email,password,age,country,sex,phoneNumber,bio} = req.body
         const user = await User.findOne({email});
         //console.log(user)
         if(user){
             return res.status(400).json({message: 'User already exists'})
         }
-        const {username,password,age,country,sex,phoneNumber,bio} = new User(req.body)
         const hashedPassword = await hashPassword(password)
         const newUser = new User({
             username,
@@ -33,16 +33,13 @@ exports.registerUser = async (req,res) => {
             bio
         })
         const result = await newUser.save()
-        //console.log(newUser.email)
         sendEmail(newUser.email,newUser.username)
-        //console.log(result)
         res.status(200).send('User registration successful')
     }catch(error){
-        console.log('error' , error)
         res.status(500).send('Server Error');
     }
 }
-
+//Login
 exports.userLogin = async (req,res) => {
     try{
         const {email,password} = req.body
@@ -60,4 +57,14 @@ exports.userLogin = async (req,res) => {
         console.log('error' , error)
     }
     
+}
+
+//Logout
+exports.userLogout = async (req,res) => {
+    try{
+        res.clearCookie('tokenAuth')
+        res.send("Logout successfuly")
+    }catch(error){
+        res.status(500).send('Server Error')
+    }
 }

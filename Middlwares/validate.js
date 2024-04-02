@@ -13,6 +13,12 @@ exports.Validate = [
     .withMessage('email is required')
     .isLength({min:5})
     .withMessage('email must be at least 5 characters long'),
+    //password
+    body('password')
+    .notEmpty()
+    .withMessage('password is required')
+    .isLength({min:5})
+    .withMessage('password must be at least 5 characters long'),
     // age
     body('age')
     .notEmpty()
@@ -51,3 +57,4 @@ exports.Validate = [
         next()
     }
 ]
+//add password

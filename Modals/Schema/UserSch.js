@@ -18,8 +18,12 @@ const User = mongoose.Schema({
     age : {
         type: 'Number'
     },
-    country : {
-        type: 'String'
+    clientAddress: {
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        state: { type: String },
+        postalCode: { type: String, required: true },
+        country: { type: String, required: true }
     },
     sex : {
         type: 'String' ,
@@ -36,6 +40,22 @@ const User = mongoose.Schema({
         default: Date.now
     }
 })
+
+/*
+User.pre('save', async function(next) {
+    // Check if password field is modified and is new
+    if (!this.isModified('password') || !this.isNew) {
+        return next();
+    }
+
+    try {
+        const hashedPassword = await hashPassword(this.password, 10);
+        this.password = hashedPassword;
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
 
 /*
 //pre-save to hash password before saving
