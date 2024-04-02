@@ -18,7 +18,7 @@ const orderItemSchema = new mongoose.Schema({
 
 // Define schema for orders
 const Order = new mongoose.Schema({
-    user: {
+    client: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to the User model
         required: true
@@ -34,15 +34,29 @@ const Order = new mongoose.Schema({
         required: true
     },
     items: [orderItemSchema], // Array of order items
+    deliveryAddress: {
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        state: { type: String },
+        postalCode: { type: String, required: true },
+        country: { type: String, required: true }
+    },
     status: {
         type: String,
-        enum: ['Pending', 'Processing', 'Shipped', 'Delivered'],
+        enum: ['pending', 'processed', 'cancelled'],
         default: 'Pending'
+    },
+    totalPrice: {
+        type: Number,
+        required: true
     },
     paymentMethod: {
         type: String,
         enum: ['Credit Card', 'Debit Card', 'PayPal', 'Cash on Delivery'],
         required: true
+    },
+    notes: {
+        type: String
     },
     date: {
         type: Date,
