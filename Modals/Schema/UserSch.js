@@ -18,8 +18,12 @@ const User = mongoose.Schema({
     age : {
         type: 'Number'
     },
-    country : {
-        type: 'String'
+    clientAddress: {
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        state: { type: String },
+        postalCode: { type: String, required: true },
+        country: { type: String, required: true }
     },
     sex : {
         type: 'String' ,
