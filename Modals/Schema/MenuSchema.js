@@ -63,6 +63,10 @@ const menuSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  isPublished: {
+    type: Boolean,
+    default: false,
+  },
   variations: [variationSchema],
   dietary: [dietarySchema],
   reviews: [reviewSchema],
