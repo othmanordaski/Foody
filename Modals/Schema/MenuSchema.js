@@ -65,7 +65,11 @@ const menuSchema = new mongoose.Schema({
   },
   isPublished: {
     type: Boolean,
-    default: false,
+    default: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
   variations: [variationSchema],
   dietary: [dietarySchema],
