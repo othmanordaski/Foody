@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const uploadImage = require('../Middlwares/multer')
-const {getAllMenus,getSingleMenu,createMenu,updateMenu,deleteMenu}=require('../Controllers/restaurantController')
+const {getAllMenus, getSingleMenu, createMenu, updateMenu, deleteMenu}=require('../Controllers/restaurantController')
 
 
 
