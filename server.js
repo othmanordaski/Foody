@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+
 const {server} = require('./config/config');
 const PORT = server.PORT
 
@@ -21,7 +22,7 @@ app.use(express.urlencoded({extended : true}))
 //Connect to the MongoDb databse
 database.connectToMongo()
 
-const {default : mongoose} = require('mongoose')
+
 
 app.use('/restaurant',resturant)
 
