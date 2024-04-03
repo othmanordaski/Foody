@@ -1,9 +1,10 @@
 const Menu = require('../Modals/Schema/MenuSchema');
 const { RESPONSE_MESSAGES, HTTP_STATUS_CODES } = require('../config/constants');
+const { menuFilterOptions } = require('../Helpers/Query/menuQueries');
 
 exports.getAllMenus = async (req, res) => {
     try {
-        const menus = await Menu.find({isPublished: true});
+        const menus = await menuFilterOptions(req);
         if (!menus || menus.length === 0) {
             return res.status(HTTP_STATUS_CODES.NOT_FOUND).json({ message: RESPONSE_MESSAGES.NO_MENU_ITEMS_AVAILABLE});
         }
@@ -40,7 +41,7 @@ exports.createMenu = async (req, res) => {
             price,
             category,
             image : filename,
-            isPublished: isPublished || false,
+            // isPublished: isPublished || false,
             variations,
             dietary,
             reviews,
@@ -66,7 +67,7 @@ exports.updateMenu = async (req, res) => {
             price,
             category,
             image: filename,
-            isPublished: isPublished || false,
+            // isPublished: isPublished || false,
             variations,
             dietary,
             reviews
@@ -94,4 +95,3 @@ exports.deleteMenu = async (req, res) => {
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 }
-
