@@ -1,5 +1,4 @@
 require('dotenv').config()
-
 const {server} = require('./config/config');
 const passport = require('./config/passport-config')
 const PORT = server.PORT
@@ -9,6 +8,9 @@ const app = express()
 
 const cookieParser = require('cookie-parser')
 
+
+const resturant = require('./Routes/RestaurantRoute')
+const cookieParser = require('cookie-parser')
 
 //Import the database connection function 
 const {connection} = require('./config/database')
@@ -29,6 +31,7 @@ const userRoutes = require('./Routes/UserRoute')
 const {default : mongoose} = require('mongoose')
 
 app.use('/client',userRoutes)
+app.use('/restaurant',resturant)
 
 app.use((err, req, res, next) => {
     // Handle errors and respond accordingly
@@ -39,4 +42,4 @@ app.use((err, req, res, next) => {
 // Start the Express server and listen on port 3000
 app.listen(PORT, () => {
     console.log('Listening on port' + PORT);
-});
+}

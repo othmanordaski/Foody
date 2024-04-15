@@ -1,22 +1,14 @@
 {
-  "name": "foody-food-delivery-website",
+  "name": "foody",
   "version": "1.0.0",
-  "description": "Arkx's final project, ",
-  "main": "server.js",
+  "description": "🍽️ Foody: Triple Registry Triple Login Website Introduction",
+  "main": "arkx.js",
   "scripts": {
-    "test": "/",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/othmanordaski/Foody.git"
-  },
-  "author": "Anwar Bahou",
+  "author": "othmane errouissat",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/othmanordaski/Foody/issues"
-  },
-  "homepage": "https://github.com/othmanordaski/Foody#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.1.0",
@@ -36,6 +28,7 @@
     "passport-google-oauth20": "^2.0.0",
     "uuid": "^9.0.1",
     "validator": "^13.11.0",
+    "sharp": "^0.33.3",
     "xss": "^1.0.15"
   },
   "keywords": [],

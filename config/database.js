@@ -1,4 +1,3 @@
-//mongodb+srv://sara:M6QL7ZgULnEjtWRm@cluster0.qfvpv3o.mongodb.net/
 const { color, database } = require('./config'); // Import configuration settings
 const mongoose = require('mongoose');
 

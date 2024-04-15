@@ -21,7 +21,7 @@ module.exports = {
       red: "\x1b[31m", // Red color
     },
     notFoundTemplate: 404, // A template or value for "not found" responses
-    jwtSecretKey: process.env.SECRETKEY || 'testsecret', // Secret key for JWT authentication
+    jwtSecretKey: process.env.JWT_SECRET_KEY || 'testsecret', // Secret key for JWT authentication
   };
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
