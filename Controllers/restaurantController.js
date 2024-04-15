@@ -41,7 +41,7 @@ exports.createMenu = async (req, res) => {
             price,
             category,
             image : filename,
-            // isPublished: isPublished || false,
+            isPublished: isPublished,
             variations,
             dietary,
             reviews,
@@ -56,6 +56,7 @@ exports.createMenu = async (req, res) => {
         return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 }
+
 exports.updateMenu = async (req, res) => {
     try {
         const id = req.params.id;
@@ -67,7 +68,7 @@ exports.updateMenu = async (req, res) => {
             price,
             category,
             image: filename,
-            // isPublished: isPublished || false,
+            isPublished: isPublished,
             variations,
             dietary,
             reviews
