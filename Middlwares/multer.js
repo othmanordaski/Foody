@@ -1,6 +1,7 @@
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const sharp = require('sharp');
+const {MAX_FILE_SIZE} = require('../config/constants')
 
 
 const storage = multer.diskStorage({
@@ -12,7 +13,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage ,limits: { fileSize: MAX_FILE_SIZE  }});
 
 const uploadMiddleware = upload.single('image');
 
@@ -29,13 +30,12 @@ const uploadImage = (req, res, next) => {
     try {
       // Optimize the image using sharp
       const optimizedImage = await sharp(req.file.path)
-        .resize(800, 600)
-        .jpeg({ quality: 80 })
+        // .jpeg({ quality: 90 })
         .toBuffer();
 
       // Upload the optimized image to Cloudinary
       const uploadStream = cloudinary.uploader.upload_stream(
-        { folder: 'menu_card' },
+        { folder: 'menu_card' , timeout: 60000},
         (error, result) => {
           if (error) {
             console.error('Error uploading image:', error);
