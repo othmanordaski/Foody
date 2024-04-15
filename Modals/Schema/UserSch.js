@@ -19,11 +19,8 @@ const User = mongoose.Schema({
         type: 'Number'
     },
     clientAddress: {
-        street: { type: String, required: true },
-        city: { type: String, required: true },
-        state: { type: String },
-        postalCode: { type: String, required: true },
-        country: { type: String, required: true }
+        type : 'String',
+        required : true
     },
     sex : {
         type: 'String' ,
@@ -34,6 +31,16 @@ const User = mongoose.Schema({
     },
     bio : {
         type: 'String'
+    },
+    verified : {
+        type : 'Boolean' ,
+        default : false
+    } ,
+    googleId: {
+        type: String // Stocker l'ID Google de l'utilisateur
+    },
+    googleAccessToken: {
+        type: String // Stocker le jeton d'authentification Google de l'utilisateur
     },
     createdAt: {
         type: Date,

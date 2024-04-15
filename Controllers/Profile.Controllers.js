@@ -1,11 +1,12 @@
 const User = require('../Modals/Schema/UserSch')
+const {HTTP_STATUS_CODES,RESPONSE_MESSAGES} = require('../config/constants')
 const {hashPassword,comparePassword} = require('../Helpers/Hashing')
 
 exports.profileUser = async (req,res) => {
     try{
         const id = req.user.user._id
         const user = await User.findById(id)
-        if(!user) return res.status(404).json({message : 'User not found'})
+        if(!user) return res.status(HTTP_STATUS_CODES.NOT_FOUND).json(RESPONSE_MESSAGES.USER_NOT_FOUND)
 
         const fields = {
             username : user.username,
@@ -16,10 +17,10 @@ exports.profileUser = async (req,res) => {
             phoneNumber : user.phoneNumber,
             bio : user.bio
         }
-        res.status(200).json(fields)
+        res.status(HTTP_STATUS_CODES.OK).json(fields)
 
     }catch(error){
-        res.status(500).send('Server Error');
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR);
     }
 }
 
@@ -31,7 +32,7 @@ exports.UpdateProfile = async (req, res) => {
 
         const userfound = await User.findById(id);
         if (!userfound) {
-            return res.status(404).json({ message: 'User not found.' });
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).json(RESPONSE_MESSAGES.USER_NOT_FOUND);
         }
 
         if (password) {
@@ -66,45 +67,10 @@ exports.UpdateProfile = async (req, res) => {
             message: 'Profile updated successfully',
         });
     } catch (error) {
-        res.status(500).json({ message: 'Server Error' });
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR);
     }
 }
-/*
-exports.UpdateProfile = async (req,res) => {
-    try{
-        const id = req.user.user._id
-        const {username, email, password, age, country, sex, phoneNumber,bio} = req.body;
-        const userfound = await User.findById(id)
 
-        if (!userfound) {
-            return res.status(404).json({ message: 'User not found.' });
-        }
-
-        const check = await comparePassword(password,userfound.password)
-        if(check){
-            return res.json({message : 'Same password'})
-        }else{
-            const hashedPassword = await hashPassword(password);
-            const user = await User.updateOne({_id : id},
-                { 
-                        username,
-                         email,
-                         password : hashedPassword , 
-                         age, 
-                         country, 
-                         sex,
-                         phoneNumber,
-                         bio
-                });
-                res.json({
-                    data: user
-                });
-        }
-    }catch(error){
-        res.status(500).send('Server Error');
-    }
-}
-*/
 exports.deleteProfile = async (req,res) => {
     try {
         const id= req.user.user._id
@@ -113,6 +79,6 @@ exports.deleteProfile = async (req,res) => {
             message: 'Profile deleted successfully',
         });
     }catch (err) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR);
     }
 }
