@@ -1,9 +1,14 @@
 require('dotenv').config()
 
+const {server} = require('./config/config');
+const passport = require('./config/passport-config')
+const PORT = server.PORT
+
 const express = require('express')
 const app = express()
+
 const cookieParser = require('cookie-parser')
-const PORT = process.env.PORT 
+
 
 //Import the database connection function 
 const {connection} = require('./config/database')
@@ -13,6 +18,9 @@ const database = connection()
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
+
+// Initialize Passport
+app.use(passport.initialize())
 
 //Connect to the MongoDb databse
 database.connectToMongo()
