@@ -65,7 +65,7 @@ const menuSchema = new mongoose.Schema({
   },
   isPublished: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   createdAt: {
     type: Date,
