@@ -1,12 +1,16 @@
 const Order = require("../Modals/Schema/OrderSchema")
+const {HTTP_STATUS_CODES,RESPONSE_MESSAGES} = require('../config/constants')
 
 //View all orders page
 exports.allOrders = async (rea,res) => {
     try{
         const orders = await Order.find({})
-        res.status(200).json(orders)
+        res.status(HTTP_STATUS_CODES.OK).json({
+            message : RESPONSE_MESSAGES.ORDER_CREATED_SUCCESS ,
+            data : orders
+        })
     }catch(error){
-        res.status(500).send('Server Error')
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
 }
 
@@ -16,14 +20,18 @@ exports.orderDetails = async (req,res) => {
         const id = req.params.id
         const order = await Order.findById(id)
         if(!order){
-            res.status(404).send('Order not found')
+            res.status(HTTP_STATUS_CODES.NOT_FOUND).send(RESPONSE_MESSAGES.ORDER_NOT_FOUND)
         }
         const details = {
-            //order.(restau, items, deliveryAddress, status, totalPrice, notes)
+            Restaurant : order.restaurant ,
+            Address : order.deliveryAddress ,
+            Status : order.status ,
+            Total : order.totalPrice ,
+            PayementMethod : order.paymentMethod
         }
-        res.status(200).json(details)
+        res.status(HTTP_STATUS_CODES.OK).json(details)
     }catch(error){
-        res.status(500).send('Server Error')
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
 }
 
@@ -36,12 +44,15 @@ exports.updateOrder = async (req,res) => {
         const updatedOrder = await Order.findByIdAndUpdate(id, updates, { new: true });
 
         if (!updatedOrder) {
-            return res.status(404).json({ message: 'Order not found' })
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).json(RESPONSE_MESSAGES.ORDER_NOT_FOUND)
         }
         
-        res.json(updatedOrder)
+        res.json({
+            message: RESPONSE_MESSAGES.ORDER_UPDATED_SUCCESS ,
+            data: updatedOrder
+        })
     } catch (error) {
-        res.status(500).json('Server error')
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
 }
 
@@ -53,12 +64,12 @@ exports.deleteOrder = async (req,res) => {
         const order = await Order.findByIdAndDelete(id)
 
         if(!order){
-            res.status(404).json({message : 'Order not found'})
+            res.status(HTTP_STATUS_CODES.NOT_FOUND).json(RESPONSE_MESSAGES.ORDER_NOT_FOUND)
         }
 
-        res.status(200).json({message : 'Order deleted successfuly'})
+        res.status(HTTP_STATUS_CODES.OK).json(RESPONSE_MESSAGES.ORDER_CANCELED_SUCCESS)
     }catch(error){
-        res.status(500).json('Server error')
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
 }
 
@@ -68,13 +79,13 @@ exports.trackOrder = async (req,res) => {
         const {id} = req.query
         const order = await Order.findById(id)
         if(!order){
-            res.status(404).json({message: 'Order not found'})
+            res.status(HTTP_STATUS_CODES.NOT_FOUND).json(RESPONSE_MESSAGES.ORDER_NOT_FOUND)
         }
         const trackingInfo = {
             status : order.status
         }
-        res.status(200).json(trackingInfo)
+        res.status(HTTP_STATUS_CODES.OK).json(trackingInfo)
     }catch(error){
-        res.status(500).send('Server Error')
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
     }
 }
