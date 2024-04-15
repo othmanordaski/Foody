@@ -1,7 +1,9 @@
 const express = require('express')
+const passport = require('passport')
 
 const {
     registerUser,
+    verifyEmail,
     userLogin,
     userLogout
     } = require('../Controllers/Clients.Controllers')
@@ -24,10 +26,24 @@ const {Validate} = require('../Middlwares/validate')
 const {isAuthenticated} = require('../Middlwares/auth.middleware')
 const routes = express.Router()
 
+// Cette route ne sera accessible qu'aux utilisateurs authentifiés via Google OAuth 2.0
+routes.get('/profile', passport.authenticate('google', { session: false }), (req, res) => {
+    res.send('Bienvenue dans votre profil');
+})
+
+// Route de callback pour l'authentification Google OAuth 2.0
+routes.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+    // Rediriger l'utilisateur vers la page de profil après une authentification réussie
+    res.redirect('/profile');
+})
+
 //Registration 
 routes.route('/register')
 .post(Sanitize,Validate,registerUser)
 
+//Verify email
+routes.route('/verify/:id/:token')
+.get(verifyEmail)
 //Login
 routes.route('/login')
 .post(userLogin)
