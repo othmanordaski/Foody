@@ -26,5 +26,6 @@ exports.sendEmail = async (mail,username) => {
           res.send("Success");
         }
       });
+
 }
-  
+

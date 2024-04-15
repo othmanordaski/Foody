@@ -13,7 +13,7 @@ exports.Validate = [
     .withMessage('email is required')
     .isLength({min:5})
     .withMessage('email must be at least 5 characters long'),
-    //password
+
     body('password')
     .notEmpty()
     .withMessage('password is required')
@@ -37,6 +37,7 @@ exports.Validate = [
     .withMessage('sex is required')
     .isLength({min:3})
     .withMessage('sex must be at least 3 characters long'),
+
     //phoneNumber
     body('phoneNumber')
     .notEmpty()
@@ -44,6 +45,7 @@ exports.Validate = [
     .isNumeric()
     .withMessage('phoneNumber must be at least 3 characters long'),
     //bio
+
     body('bio')
     .notEmpty()
     .withMessage('bio is required')
@@ -57,4 +59,4 @@ exports.Validate = [
         next()
     }
 ]
-//add password
+

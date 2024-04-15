@@ -1,5 +1,6 @@
 require('dotenv').config()
 const {server} = require('./config/config');
+
 const passport = require('./config/passport-config')
 const PORT = server.PORT
 
@@ -8,8 +9,6 @@ const app = express()
 
 const cookieParser = require('cookie-parser')
 
-
-const resturant = require('./Routes/RestaurantRoute')
 const cookieParser = require('cookie-parser')
 
 //Import the database connection function 
@@ -27,11 +26,14 @@ app.use(passport.initialize())
 //Connect to the MongoDb databse
 database.connectToMongo()
 
+const resturant = require('./Routes/RestaurantRoute')
+const deliveryRoutes = require('./Routes/DeliveryRoute')
 const userRoutes = require('./Routes/UserRoute')
 const {default : mongoose} = require('mongoose')
 
 app.use('/client',userRoutes)
 app.use('/restaurant',resturant)
+app.use('/delivery',deliveryRoutes)
 
 app.use((err, req, res, next) => {
     // Handle errors and respond accordingly
