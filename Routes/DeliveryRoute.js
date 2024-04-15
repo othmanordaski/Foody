@@ -1,9 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const {renderDeliveryRegister,
-    renderDeliveryLogin ,
-    RegisterDelivery,
+const {RegisterDelivery,
     LoginDelivery
     } = require('../Controllers/deliveryperson')
 
@@ -19,20 +17,18 @@ const {isAuthenticated} = require('../Middlwares/auth.middleware')
 
 //Registration 
 router.route('/register')
-.get(renderDeliveryRegister)
 .post(Sanitize,Validate,RegisterDelivery)
 
 //Login
 router.route('/login')
-.get(renderDeliveryLogin)
 .post(LoginDelivery)
 
 //profile
-router.route('/profile/:id')
+router.route('/profile')
 .get(isAuthenticated,DeliveryProfile)
 router.route('/profile/edit')
 .patch(isAuthenticated,UpdateProfile)
-router.route('/profile/delete/:id')
+router.route('/profile/delete')
 .delete(deleteProfile)
 
 module.exports = router
