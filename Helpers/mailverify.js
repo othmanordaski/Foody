@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer')
 require('dotenv').config()
 
-exports.sendEmail = async (mail,username) => {
+exports.sendEmailVerification = async (mail,userId,token) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -13,8 +13,9 @@ exports.sendEmail = async (mail,username) => {
     const mailOptions = {
         from: process.env.EMAIL,
         to: mail,
-        subject: "Welcome To our platform",
-        html : `<h3>Welcome ${username}</h3><br><p>Thank you for registering</p>`
+        subject: "Verify your email address",
+        text : `Please click the confirmation link.
+        http://localhost:3000/client/verify/:${userId}/:${token}`
       };
 
       transporter.sendMail(mailOptions, function(error, info) {
@@ -26,6 +27,5 @@ exports.sendEmail = async (mail,username) => {
           res.send("Success");
         }
       });
-
 }
-
+  
