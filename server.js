@@ -1,13 +1,11 @@
 require('dotenv').config()
 const {server} = require('./config/config');
 
-const passport = require('./config/passport-config')
+//const passport = require('./config/passport-config')
 const PORT = server.PORT
 
 const express = require('express')
 const app = express()
-
-const cookieParser = require('cookie-parser')
 
 const cookieParser = require('cookie-parser')
 
@@ -21,18 +19,18 @@ app.use(express.json())
 app.use(express.urlencoded({extended : true}))
 
 // Initialize Passport
-app.use(passport.initialize())
+//app.use(passport.initialize())
 
 //Connect to the MongoDb databse
 database.connectToMongo()
 
-const resturant = require('./Routes/RestaurantRoute')
+const restaurant = require('./Routes/RestaurantRoute')
 const deliveryRoutes = require('./Routes/DeliveryRoute')
 const userRoutes = require('./Routes/UserRoute')
 const {default : mongoose} = require('mongoose')
 
 app.use('/client',userRoutes)
-app.use('/restaurant',resturant)
+app.use('/restaurant',restaurant)
 app.use('/delivery',deliveryRoutes)
 
 app.use((err, req, res, next) => {
@@ -44,4 +42,4 @@ app.use((err, req, res, next) => {
 // Start the Express server and listen on port 3000
 app.listen(PORT, () => {
     console.log('Listening on port' + PORT);
-}
+})
