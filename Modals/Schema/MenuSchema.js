@@ -63,6 +63,11 @@ const menuSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  ownerId:{
+    type : mongoose.Schema.Types.ObjectId,
+    ref: 'restaurants',
+    required: true
+  },
   isPublished: {
     type: Boolean,
     default: false,
