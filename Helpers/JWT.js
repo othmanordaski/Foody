@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 exports.generateToken = async (data)=>{
 
-    return jwt.sign(data, process.env.SECRETKEY, {expiresIn: '1h'})
+    return jwt.sign(data.toJSON(), process.env.SECRETKEY, {expiresIn: '1h'})
 
 }
 
