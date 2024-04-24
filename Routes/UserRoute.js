@@ -1,5 +1,5 @@
 const express = require('express')
-const passport = require('passport')
+//const passport = require('passport')
 
 const {
     registerUser,
@@ -10,7 +10,9 @@ const {
 
 const {profileUser,
     UpdateProfile,
-    deleteProfile
+    deleteProfile,
+    forgotPassword,
+    resetPassword
     } = require('../Controllers/Profile.Controllers')
 
 const {
@@ -27,15 +29,17 @@ const {isAuthenticated} = require('../Middlwares/auth.middleware')
 const routes = express.Router()
 
 // Cette route ne sera accessible qu'aux utilisateurs authentifiés via Google OAuth 2.0
+/*
 routes.get('/profile', passport.authenticate('google', { session: false }), (req, res) => {
     res.send('Bienvenue dans votre profil');
 })
-
+*/
 // Route de callback pour l'authentification Google OAuth 2.0
+/*
 routes.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
     // Rediriger l'utilisateur vers la page de profil après une authentification réussie
     res.redirect('/profile');
-})
+})*/
 
 //Registration 
 routes.route('/register')
@@ -61,6 +65,13 @@ routes.route('/profile/edit')
 //Delete
 routes.route('/profile/delete')
 .delete(isAuthenticated,deleteProfile)
+
+//route for forget password
+routes.route('/forgot-password')
+.post(isAuthenticated,forgotPassword)
+//route to reset password
+routes.route('/reset-password/:token')
+.post(isAuthenticated,resetPassword)
 
 //All Orders 
 routes.get('/orders',allOrders)
