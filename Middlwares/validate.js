@@ -24,7 +24,7 @@ exports.Validate = [
     .notEmpty()
     .withMessage('age is required')
     .isNumeric()
-    .withMessage('age must be a boolean'),
+    .withMessage('age must be a number'),
     //country
     body('country')
     .notEmpty()
