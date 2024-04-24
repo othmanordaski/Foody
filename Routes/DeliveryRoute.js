@@ -17,7 +17,7 @@ const {isAuthenticated} = require('../Middlwares/auth.middleware')
 
 //Registration 
 router.route('/register')
-.post(Sanitize,Validate,RegisterDelivery)
+.post(RegisterDelivery)
 
 //Login
 router.route('/login')
