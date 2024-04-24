@@ -36,6 +36,12 @@ const User = mongoose.Schema({
         type : 'Boolean' ,
         default : false
     } ,
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
+    },
     googleId: {
         type: String // Stocker l'ID Google de l'utilisateur
     },
