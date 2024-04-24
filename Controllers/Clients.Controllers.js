@@ -87,7 +87,7 @@ exports.userLogin = async (req,res) => {
         const checked =await comparePassword(password,user.password)
         if(!checked) return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({message:"Incorrect Password"})
 
-        const token = await generateToken({user})
+        const token = await generateToken(user)
         res.status(HTTP_STATUS_CODES.OK).cookie('tokenAuth',token).send('User logged successfuly')
     }catch(error){
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send('Server Error');
