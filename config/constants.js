@@ -6,6 +6,7 @@ exports.HTTP_STATUS_CODES = {
     UNAUTHORIZED: 401, // Authentication required
     FORBIDDEN: 403, // Access denied
     NOT_FOUND: 404, // Resource not found
+    NOT_ALLOWED: 405 , // Resource not allowed
     CONFLICT: 409, // Conflicting resource
     INTERNAL_SERVER_ERROR: 500, // Server error
   };
@@ -24,6 +25,7 @@ exports.HTTP_STATUS_CODES = {
     MENU_CREATION_FAILED: 'Failed to create menu item', // When creating a menu item fails
     MENU_UPDATE_FAILED: 'Failed to update menu item', // When updating a menu item fails
     MENU_DELETION_FAILED: 'Failed to delete menu item', // When deleting a menu item fails
+    MENU_NOT_ALLOWED : 'You are not allowed to create a menu', //
   
     // Order
     ORDER_NOT_FOUND: 'Order not found', // When an order is not found
@@ -40,7 +42,21 @@ exports.HTTP_STATUS_CODES = {
     USER_UPDATED_SUCCESS: 'User updated successfully', // When a user is updated successfully
     USER_CREATION_FAILED: 'Failed to register user', // When creating a user fails
     USER_UPDATE_FAILED: 'Failed to update user', // When updating a user fails
+    USER_TOKEN_INVALID : 'Invalid or expired token',
+    USER_PASSWORD_RESET_SUCCESS: 'Password reset successfully' ,
     INVALID_CREDENTIALS: 'Invalid credentials', // When credentials (username/email and password) are invalid
+
+    //Restaurant
+    RESTAU_NOT_FOUND: 'Restaurant not found', // When a user is not found
+    RESTAU_CREATED_SUCCESS: 'Restaurant registered successfully', // When a user is created successfully
+    RESTAU_ALREADY_EXIST: 'Restaurant already exists', // When a restaurant is already exists
+    RESTAU_UPDATED_SUCCESS: 'Restaurant updated successfully', // When a user is updated successfully
+    RESTAU_CREATION_FAILED: 'Failed to register Restaurant', // When creating a user fails
+    RESTAU_UPDATE_FAILED: 'Failed to update Restaurant', // When updating a user fails
+    RESTAU_NOT_FOUND: 'Failed to find restaurant', // When a restau is not found
+    RESTAU_INVALID_PASSWORD : 'Invalid password', //When password is invalid
+    RESTAU_DELETED_SUCCESS : 'Restaurant deleted successfully', // When a restau is deleted successfully
+    RESTAU_INVALID_CREDENTIALS: 'Invalid credentials', // When credentials (username/email and password) are invalid
   
     // General
     INTERNAL_SERVER_ERROR: 'Internal server error', // When an unexpected server error occurs
