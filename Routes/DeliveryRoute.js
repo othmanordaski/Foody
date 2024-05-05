@@ -10,9 +10,12 @@ const {DeliveryProfile,
    deleteProfile
     } = require('../Controllers/deliveryprofile')
 
+const {assignDelivery} = require('../Controllers/Orders.Controllers')
+
 const {Sanitize} = require('../Middlwares/sanitize')
 const {Validate} = require('../Middlwares/validate')
 const {isAuthenticated} = require('../Middlwares/auth.middleware')
+const {checkPermission} = require('../Middlwares/rbacMiddleware')
 
 
 //Registration 
@@ -25,10 +28,13 @@ router.route('/login')
 
 //profile
 router.route('/profile')
-.get(isAuthenticated,DeliveryProfile)
+.get(isAuthenticated,checkPermission("viewDeliveryDetails"),DeliveryProfile)
 router.route('/profile/edit')
-.patch(isAuthenticated,UpdateProfile)
+.patch(isAuthenticated,checkPermission("updateProfile"),UpdateProfile)
 router.route('/profile/delete')
-.delete(deleteProfile)
+.delete(checkPermission("updateProfile"),deleteProfile)
+
+router.route('/orders/assignOrder/:id')
+.get(isAuthenticated,checkPermission("AssignedOrder"),assignDelivery)
 
 module.exports = router
