@@ -1,0 +1,51 @@
+{
+    "roles": [
+      {
+        "name": "Admin",
+        "permissions": [
+          "manageUsers", 
+          "manageRestaurants", 
+          "manageDeliveries"
+        ]
+      },
+      {
+        "name": "Restaurant",
+        "permissions": [
+          "manageRestaurantInfo",
+          "viewOrders", 
+          "updateOrderStatus", 
+          "viewOrderHistory"
+        ]
+      },
+      {
+        "name": "Client",
+        "permissions": [
+          "createOrder", 
+          "trackOrder", 
+          "viewOrderHistory", 
+          "updateProfile",
+          "viewOrders",
+          "updateOrder",
+          "deleteOrder"
+        ]
+      },
+      {
+        "name": "Delivery",
+        "permissions": [
+          "viewAssignedDeliveries", 
+          "updateDeliveryStatus", 
+          "viewDeliveryDetails", 
+          "updateProfile",
+          "AssignedOrder"
+        ]
+      },
+      {
+        "name": "Guest",
+        "permissions": [
+          "browseRestaurants", 
+          "viewRestaurantDetails"
+        ]
+      }
+    ]
+  }
+
