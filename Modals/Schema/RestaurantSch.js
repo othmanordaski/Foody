@@ -39,8 +39,8 @@ const restaurantSchema = new mongoose.Schema({
     },
     role: {
         type : String,
+        enum: ['Admin', 'Client', 'Restaurant','Delivery'],
         default: 'Restaurant'
-
     },
     createdAt: {
         type: Date,

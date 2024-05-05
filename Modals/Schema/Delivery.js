@@ -1,54 +1,59 @@
 const mongoose = require('mongoose')
    
 const DeliveryPerson = mongoose.Schema({   
-// //   // ID: { // Unique identifier for each delivery person (Primary Key)
-// //         type: 'string', // Assuming the ID is a string, could be different depending on implementation
-// //         unique: true, // Ensures uniqueness
-// //         required: true // Mandatory field
-//     },
-    username: { // Name of the delivery person
-        type: 'string', // Assuming the name is a string
-        required: true // Mandatory field
+    username: { 
+        type: 'string', 
+        required: true 
     },
-    phoneNumber: { // Contact number of the delivery person
-        type: Number, // Assuming the phone number is a string
-        required: true // Mandatory field
+    phoneNumber: {
+        type: Number, 
+        required: true 
     },
-    email: { // Email address of the delivery person
-        type: 'string', // Assuming the email is a string
-        required: true, // Mandatory field
-        unique: true // Ensures uniqueness
+    email: { 
+        type: 'string', 
+        required: true, 
+        unique: true 
     },
     password : {
         type : 'string',
         required : true,
     },
-    address: { // Current address of the delivery person
-        type: 'string', // Assuming the address is a string
-        required: true // Mandatory field
+    address: {
+        type: 'string', 
+        required: true 
     },
-    vehicleType: { // Type of vehicle used for delivery
-        type: 'string', // Assuming the vehicle type is a string
+    vehicleType: { 
+        type: 'string', 
         enum: ['car', 'moto'],
-        required: true // Mandatory field
+        required: true 
     },
-    vehiclePlateNumber: { // License plate number of the vehicle
-        type: 'string', // Assuming the plate number is a string
-        required: true // Mandatory field
+    vehiclePlateNumber: { 
+        type: 'string',
+        required: true 
     },
-    status: { // Current availability status
-        type: 'string', // Assuming the status is a string
-        enum: ['available', 'busy', 'offline'], // Possible values for status
-        //required: true // Mandatory field
+    status: {
+        type: 'string', 
+        enum: ['available', 'busy', 'offline'], 
+        //required: true
     },
-    rating: { // Average rating given by customers for delivery service
-        type: 'number', // Assuming the rating is a number
-        min: 0, // Minimum possible rating
-       // max: 5 // Maximum possible rating
+    rating: { 
+        type: 'number', 
+        min: 0, 
+        max: 5 
     },
-    joinedDate: { // Date when the delivery person joined the platform
-        type: 'date', // Assuming the joined date is a date type
-        //required: true // Mandatory field
+    role : {
+        type : String,
+        enum: ['Admin', 'Client', 'Restaurant','Delivery'],
+        default : 'Delivery'
+    },
+    assignedOrder: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'orders', 
+        required: true
+    },
+    joinedDate: { 
+        type: 'date', 
+        //required: true 
     }
 })
 

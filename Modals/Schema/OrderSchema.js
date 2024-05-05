@@ -1,73 +1,54 @@
 const mongoose = require('mongoose');
 
-// Define schema for order items
-const orderItemSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    quantity: {
-        type: Number,
-        required: true
-    },
-    price: {
-        type: Number,
-        required: true
-    }
-});
-
-// Define schema for orders
 const Order = new mongoose.Schema({
-    client: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
-        required: true
-    },
-    restaurant: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Restaurant', // Reference to the Restaurant model
-        required: true
-    },
-    menu : {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Menu', // Reference to the Menu model
-        required: true
-    },
-    items: [orderItemSchema], // Array of order items
-    deliveryAddress: {
-        street: { type: String, required: true },
-        city: { type: String, required: true },
-        state: { type: String },
-        postalCode: { type: String, required: true },
-        country: { type: String, required: true }
+    items: [{
+        menuId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Menu',
+            required: true
+        },
+        quantity: {
+            type: Number,
+            required: true,
+            min: 1
+        },
+        variation: {
+            type: String // You can adjust this based on your variation schema
+        }
+    }],
+    total: {
+        type: Number,
+        required: true,
+        min: 0
     },
     status: {
         type: String,
-        enum: ['pending', 'processed', 'cancelled'],
-        default: 'Pending'
+        enum: ['pending', 'confirmed', 'preparing', 'outForDelivery', 'delivered', 'cancelled'],
+        default: 'pending'
     },
-    totalPrice: {
-        type: Number,
+    customerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users', // Assuming you have a User model for customers
         required: true
     },
-    paymentMethod: {
-        type: String,
-        enum: ['Credit Card', 'Debit Card', 'PayPal', 'Cash on Delivery'],
+    restaurantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Restaurant', // Assuming you have a Restaurant model
         required: true
     },
-    notes: {
-        type: String
-    },
-    date: {
+    /*
+    deliveryPersonId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'delivery' // Assuming you have a DeliveryPerson model
+    },*/
+    createdAt: {
         type: Date,
         default: Date.now
     },
-    createdAt: {
+    updatedAt: {
         type: Date,
         default: Date.now
     }
 });
-
-// export the Order model
 
 module.exports = mongoose.model('Order', Order);
