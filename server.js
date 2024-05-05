@@ -24,11 +24,13 @@ app.use(express.urlencoded({extended : true}))
 //Connect to the MongoDb databse
 database.connectToMongo()
 
+const adminRoutes = require('./Routes/AdminRoute')
 const restaurant = require('./Routes/RestaurantRoute')
 const deliveryRoutes = require('./Routes/DeliveryRoute')
 const userRoutes = require('./Routes/UserRoute')
 const {default : mongoose} = require('mongoose')
 
+app.use('/admin',adminRoutes)
 app.use('/client',userRoutes)
 app.use('/restaurant',restaurant)
 app.use('/delivery',deliveryRoutes)
