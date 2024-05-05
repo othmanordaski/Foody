@@ -13,7 +13,7 @@ exports.registerUser = async (req,res) => {
         const {username,email,password,age,clientAddress,country,sex,phoneNumber,bio,verified} = req.body
         const user = await User.findOne({email :email})
         if(user){
-            return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({message: 'User already exists'})
+            return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({message: RESPONSE_MESSAGES.USER_ALREADY_EXIST})
         }
         const hashedPassword = await hashPassword(password)
         const newUser = new User({
@@ -35,11 +35,11 @@ exports.registerUser = async (req,res) => {
         }).save()
         const sendTokenMail = await sendEmailVerification(newUser.email,token.userId,token.token) //function to verify email client
         if(sendTokenMail){
-            sendEmail(newUser.email,newUser.username)
+            await sendEmail(newUser.email,newUser.username)
         }
         res.status(HTTP_STATUS_CODES.OK).send(RESPONSE_MESSAGES.USER_CREATED_SUCCESS)
     }catch(error){
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send('Server Error');
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({Error : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR});
     }
 }
 
@@ -53,25 +53,25 @@ exports.verifyEmail = async (req,res) => {
         })
 
         if(!userToken){
-            return res.status(HTTP_STATUS_CODES.BAD_REQUEST).send({message: "Your verification link may have expired."})
+            return res.status(HTTP_STATUS_CODES.BAD_REQUEST).send({message: RESPONSE_MESSAGES.VERIFICATION_LINK_EXPIRED})
         }else{
             const user = await User.findOne({_id : req.params.id})
             if(!user){
-                return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).send({message: "We were enable to find a user for this verification.Signup!"})
+                return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).send({message: RESPONSE_MESSAGES.UNAUTHORIZED})
             }else if(user.verified){
-                return res.status(HTTP_STATUS_CODES.OK).send({message: "User has been already verified.Please login"})
+                return res.status(HTTP_STATUS_CODES.OK).send({message: RESPONSE_MESSAGES.ALREADY_VERIFIED})
             }else{
                 const updated = await User.updateOne({verified:true})
 
                 if(!updated){
-                    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message: "error"})
+                    return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message: RESPONSE_MESSAGES.FAILURE})
                 }else{
-                    return res.status(HTTP_STATUS_CODES.OK).send({message : "Your account has been successfuly verified"})
+                    return res.status(HTTP_STATUS_CODES.OK).send({message :RESPONSE_MESSAGES.VERIFIED_SUCCESS})
                 }
             }
         }
     }catch(error){
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST).send("An error occurred")
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST).send({ message : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
     }
 }
 
@@ -85,12 +85,12 @@ exports.userLogin = async (req,res) => {
         }
 
         const checked =await comparePassword(password,user.password)
-        if(!checked) return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({message:"Incorrect Password"})
+        if(!checked) return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({message: RESPONSE_MESSAGES.USER_WRONG_PASSWORD})
 
         const token = await generateToken(user)
-        res.status(HTTP_STATUS_CODES.OK).cookie('tokenAuth',token).send('User logged successfuly')
+        res.status(HTTP_STATUS_CODES.OK).cookie('tokenAuth',token).send({message : RESPONSE_MESSAGES.USER_LOGGED_IN})
     }catch(error){
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send('Server Error');
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR});
     }
     
 }
@@ -99,8 +99,8 @@ exports.userLogin = async (req,res) => {
 exports.userLogout = async (req,res) => {
     try{
         res.clearCookie('tokenAuth')
-        res.send("Logout successfuly")
+        res.send({message : RESPONSE_MESSAGES.USER_LOGGED_OUT})
     }catch(error){
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send('Server Error')
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
     }
 }

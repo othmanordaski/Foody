@@ -1,91 +1,131 @@
 const Order = require("../Modals/Schema/OrderSchema")
+const DeliveryPerson = require('../Modals/Schema/Delivery')
 const {HTTP_STATUS_CODES,RESPONSE_MESSAGES} = require('../config/constants')
+const { response } = require("express")
 
-//View all orders page
-exports.allOrders = async (rea,res) => {
+
+//Create a new order by the client ofc
+exports.createOrder = async (req,res) => {
     try{
-        const orders = await Order.find({})
-        res.status(HTTP_STATUS_CODES.OK).json({
-            message : RESPONSE_MESSAGES.ORDER_CREATED_SUCCESS ,
-            data : orders
+        const restauId = req.params.id
+        const menuId = req.params.menuid
+        const {_id} = req.user
+        const {total,status,quantity,variations} = req.body
+        const item = [{
+            menuId: menuId,
+            quantity: quantity, 
+            variation: variations 
+        }]
+        const  newOrder = new Order({
+            items : item,
+            total,
+            status,
+            customerId : _id,
+            restaurantId: restauId,
         })
+        const order = await newOrder.save()
+        res.status(HTTP_STATUS_CODES.OK).send({message: RESPONSE_MESSAGES.ORDER_CREATED_SUCCESS})
     }catch(error){
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
     }
 }
 
-//Order details page
-exports.orderDetails = async (req,res) => {
+//Get All Orders
+exports.getAllOrders = async (req,res) => {
     try{
-        const id = req.params.id
-        const order = await Order.findById(id)
+        const orders = await Order.find()
+        res.status(HTTP_STATUS_CODES.OK).send(orders)
+    }catch(error){
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).SEND({messsage: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
+    }
+}
+
+//Get Order by ID
+exports.getOrderById = async (req,res) => {
+    try{
+        const orderId = req.params.id
+        const order = await Order.findById(orderId)
+
         if(!order){
-            res.status(HTTP_STATUS_CODES.NOT_FOUND).send(RESPONSE_MESSAGES.ORDER_NOT_FOUND)
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).send({message: RESPONSE_MESSAGES.ORDER_NOT_FOUND})
         }
-        const details = {
-            Restaurant : order.restaurant ,
-            Address : order.deliveryAddress ,
-            Status : order.status ,
-            Total : order.totalPrice ,
-            PayementMethod : order.paymentMethod
-        }
-        res.status(HTTP_STATUS_CODES.OK).json(details)
+        res.status(HTTP_STATUS_CODES.OK).send(order)
     }catch(error){
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).SEND({messsage: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
     }
 }
 
-//Update order
-exports.updateOrder = async (req,res) => {
-    try {
-        const id = req.params.id
-        const updates = req.body
+//Update Order
+exports.updateOrder = async (req,res) =>{
+    try{
+        const orderId = req.params.id
+        const order = await Order.findById(orderId)
 
-        const updatedOrder = await Order.findByIdAndUpdate(id, updates, { new: true });
-
-        if (!updatedOrder) {
-            return res.status(HTTP_STATUS_CODES.NOT_FOUND).json(RESPONSE_MESSAGES.ORDER_NOT_FOUND)
+        if(!order){
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).send({MESSAGE : RESPONSE_MESSAGES.ORDER_NOT_FOUND})
         }
-        
-        res.json({
-            message: RESPONSE_MESSAGES.ORDER_UPDATED_SUCCESS ,
-            data: updatedOrder
+        const {total,status,quantity,variations} = req.body
+        const updatedOrder = await Order.findByIdAndUpdate(orderId,{
+            total,
+            status,
+            quantity,
+            variations
         })
-    } catch (error) {
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
+
+        res.status(HTTP_STATUS_CODES.OK).send({message : updatedOrder})
+    }catch(error){
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).SEND({messsage: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
     }
+    
+
 }
 
-//Delete Order
+//Delete order by client
 exports.deleteOrder = async (req,res) => {
     try{
-        const id = req.params.id
-
-        const order = await Order.findByIdAndDelete(id)
-
+        const orderId = req.params.id
+        const order = await Order.findByIdAndDelete(orderId)
         if(!order){
-            res.status(HTTP_STATUS_CODES.NOT_FOUND).json(RESPONSE_MESSAGES.ORDER_NOT_FOUND)
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).send({message : RESPONSE_MESSAGES.ORDER_NOT_FOUND})
         }
-
-        res.status(HTTP_STATUS_CODES.OK).json(RESPONSE_MESSAGES.ORDER_CANCELED_SUCCESS)
+        res.status(HTTP_STATUS_CODES.OK).send({message : order})
     }catch(error){
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).SEND({messsage: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
     }
 }
 
-//Track orders page
-exports.trackOrder = async (req,res) => {
+//Assign delivery person to order
+exports.assignDelivery = async (req,res) => {
     try{
-        const {id} = req.query
-        const order = await Order.findById(id)
+        const orderId= req.params.id
+        const {_id} = req.user
+
+        const order = await Order.findById(orderId)
         if(!order){
-            res.status(HTTP_STATUS_CODES.NOT_FOUND).json(RESPONSE_MESSAGES.ORDER_NOT_FOUND)
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).send({message : RESPONSE_MESSAGES.ORDER_NOT_FOUND})
         }
-        const trackingInfo = {
-            status : order.status
-        }
-        res.status(HTTP_STATUS_CODES.OK).json(trackingInfo)
+        console.log(req.user)
+        const delivery = await DeliveryPerson.findByIdAndUpdate(_id,{
+            status : 'Assigned',
+            assignedOrder : orderId   
+        },{new:true})
+        res.status(HTTP_STATUS_CODES.OK).send({message: delivery})
     }catch(error){
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR)
+        console.log(error)
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({messsage: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
     }
 }
+
+// Get delivery details for an order
+exports.getDeliveryDetails = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const delivery = await DeliveryPerson.findOne({ orderId });
+        if (!delivery) {
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).send({ error: RESPONSE_MESSAGES.DELIVERY_NOT_FOUND });
+        }
+        res.status(200).send(delivery);
+    } catch (error) {
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
+    }
+};

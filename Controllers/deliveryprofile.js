@@ -40,8 +40,8 @@ exports.UpdateProfile = async(req,res) => {
         address,
         vehicleType,
         vehiclePlateNumber,
-        status,rating,
-        joinedDate})
+        status,
+        rating})
     res.status(200).send('profile updated')
 }catch(error){
     res.status(500).send('Server Error');
