@@ -35,16 +35,46 @@ exports.HTTP_STATUS_CODES = {
     ORDER_CREATION_FAILED: 'Failed to place order', // When creating an order fails
     ORDER_UPDATE_FAILED: 'Failed to update order', // When updating an order fails
     ORDER_CANCELLATION_FAILED: 'Failed to cancel order', // When canceling an order fails
+
+    //Admin
+    ADMIN_NOT_FOUND : 'Admin not found', //when a admin is not found
+    ADMIN_ALREADY_EXIST : 'Admin already exists', //when a admin is already exists
+    ADMIN_CREATED_SUCCESS :'Admin created succesfully', //when a admin is created succesfully
+    ADMIN_CREATED_FAILED : 'Admin created failed', //when a admin is failed to create
+    ADMIN_LOGGED_IN : 'Admin logged in', //when a admin is logged in
+    ADMIN_PASSWORD_INCORRECT : 'Admin password incorrect', //when a password is incorrect
+    ADMIN_INVALID_CREDENTIAL : 'Invalid credentials', //when credentials are invalid
+    ADMIN_LOGOUT_SUCCESS : 'Admin log out' , //when admin log out
+    ADMIN_MANAGE_USER_FAILED : 'Failed to manage users' ,//when he failed to manage users
+    ADMIN_MANAGE_RESTAURANT_FAILED : 'Failed to manage restaurant' ,//when he failed to manage restaurant
+    ADMIN_MANAGE_DELIVERY_FAILED : 'Failed to manage delivery' ,//when he failed to manage delivery
   
     // User
     USER_NOT_FOUND: 'User not found', // When a user is not found
+    USER_ALREADY_EXIST : 'User already exists', // When a user is already exists
     USER_CREATED_SUCCESS: 'User registered successfully', // When a user is created successfully
     USER_UPDATED_SUCCESS: 'User updated successfully', // When a user is updated successfully
     USER_CREATION_FAILED: 'Failed to register user', // When creating a user fails
     USER_UPDATE_FAILED: 'Failed to update user', // When updating a user fails
     USER_TOKEN_INVALID : 'Invalid or expired token',
     USER_PASSWORD_RESET_SUCCESS: 'Password reset successfully' ,
+    USER_WRONG_PASSWORD : 'Wrong Password', // When a user enters a password incorrect
+    USER_LOGGED_IN : 'User logged in successfully', // When a user is logged in successfully
+    USER_LOGGED_OUT : 'User logged out successfully', // When a user is logged out successfully
     INVALID_CREDENTIALS: 'Invalid credentials', // When credentials (username/email and password) are invalid
+
+    // Delivery
+    DELIVERY_NOT_FOUND: 'Delivery not found', // When a user is not found
+    DELIVER_ALREADY_EXIST: 'Delivery already exists', // When a delivery is already exists
+    DELIVERY_REGISTER_SUCCESS: 'Delivery registered successfully', // When a user is created successfully
+    DELIVERY_UPDATED_SUCCESS: 'Delivery updated successfully', // When a user is updated successfully
+    DELIVERY_REGISTER_FAILED: 'Failed to register Delivery', // When creating a user fails
+    DELIVERY_UPDATE_FAILED: 'Failed to update Delivery', // When updating a user fails
+    DELIVERY_TOKEN_INVALID : 'Invalid or expired token',
+    DELIVERY_PASSWORD_RESET_SUCCESS: 'Password reset successfully' ,
+    DELIVERY_PASSWORD_WRONG : 'Incorrect Password' , 
+    DELIVERY_LOGGED_IN : 'Logged in successfully' , // When a user is logged in successfully
+    DELIVERY_INVALID_CREDENTIALS: 'Invalid credentials', // When credentials (username/email and password) are invalid
 
     //Restaurant
     RESTAU_NOT_FOUND: 'Restaurant not found', // When a user is not found
@@ -58,6 +88,11 @@ exports.HTTP_STATUS_CODES = {
     RESTAU_DELETED_SUCCESS : 'Restaurant deleted successfully', // When a restau is deleted successfully
     RESTAU_INVALID_CREDENTIALS: 'Invalid credentials', // When credentials (username/email and password) are invalid
   
+    //Token Verification
+    VERIFICATION_LINK_EXPIRED : 'Your verification link may have expired.', // When a verification link is expired 
+    UNAUTHORIZED : 'We were enable to find a user for this verification.Signup!', 
+    ALREADY_VERIFIED : "User has been already verified.Please login", // When a user is already verified
+    VERIFIED_SUCCESS :  "Your account has been successfuly verified", // When a user is successfully verified
     // General
     INTERNAL_SERVER_ERROR: 'Internal server error', // When an unexpected server error occurs
     VALIDATION_ERROR: 'Validation error', // When input data fails validation
