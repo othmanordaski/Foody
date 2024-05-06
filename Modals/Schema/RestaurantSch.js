@@ -14,14 +14,6 @@ const restaurantSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    country: {
-        type: String,
-        required: true
-    },
-    city: {
-        type: String,
-        required: true
-    },
     address: {
         type: String,
         required: true
@@ -35,12 +27,17 @@ const restaurantSchema = new mongoose.Schema({
         of: {
             type: String
         },
-        required: true
     },
     role: {
         type : String,
         enum: ['Admin', 'Client', 'Restaurant','Delivery'],
         default: 'Restaurant'
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
     },
     createdAt: {
         type: Date,

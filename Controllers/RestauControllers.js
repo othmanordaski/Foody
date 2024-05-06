@@ -6,11 +6,12 @@ const {sendEmailVerification} = require('../Helpers/mailverify')
 const { hashPassword, comparePassword } = require('../Helpers/Hashing');
 const { generateToken } = require('../Helpers/JWT');
 const crypto = require('crypto')
+const {sendPaawordResetMail} = require('../Helpers/mailer')
 
 // Controller to register a new restaurant
 exports.registerRestaurant = async (req, res) => {
     try {
-        const { name, email, password, country, city, address, phoneNumber, openingHours, menu, role } = req.body;
+        const { name, email, password, address, phoneNumber, openingHours, menu, role } = req.body;
 
         const existingRestaurant = await Restaurant.findOne({ email });
         if (existingRestaurant) {
@@ -22,9 +23,7 @@ exports.registerRestaurant = async (req, res) => {
         const newRestaurant = new Restaurant({ 
             name, 
             email, 
-            password: hashedPassword, 
-            country, 
-            city, 
+            password: hashedPassword,
             address, 
             phoneNumber, 
             openingHours, 
@@ -117,8 +116,6 @@ exports.getRestaurantProfile = async (req, res) => {
         const fieldsToView = {
             name : restaurantProfile.name,
             email : restaurantProfile.email,
-            country : restaurantProfile.country,
-            city : restaurantProfile.city,
             address : restaurantProfile.address,
             phoneNumber : restaurantProfile.phoneNumber,
             openingHours : restaurantProfile.openingHours,
@@ -146,8 +143,6 @@ exports.updateRestaurantProfile = async (req, res) => {
         const updatedData = {
             name: req.body.name || existingOwner.name,
             email: req.body.email || existingOwner.email,
-            country: req.body.country || existingOwner.country,
-            city: req.body.city || existingOwner.city,
             address: req.body.address || existingOwner.address,
             phoneNumber: req.body.phoneNumber || existingOwner.phoneNumber,
             openingHours: req.body.openingHours || existingOwner.openingHours,
@@ -192,3 +187,51 @@ exports.deleteRestaurantProfile = async (req, res) => {
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 };
+
+exports.forgotPassword = async (req,res) => {
+    try{
+        const {email} = req.body
+        const user = await Restaurant.findOne({email})
+
+        if(!user){
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).json({message : RESPONSE_MESSAGES.USER_NOT_FOUND})
+        }
+
+        const resetToken = crypto.randomBytes(20).toString('hex')
+
+        //save the token to the user schema in database
+        user.resetPasswordToken = resetToken
+        user.resetPasswordExpires = Date.now() + 3600000
+
+        await user.save()
+
+        await sendPaawordResetMail(email,resetToken)
+
+        return res.status(HTTP_STATUS_CODES.OK).json({message: 'Password resetemail sent'})
+    }catch(error){
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).JSON({message : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
+    }
+}
+
+exports.resetPassword = async (req,res) => {
+    try{
+        const {token} = req.params
+        const {newPassword} = req.body
+
+        const user = await Restaurant.findOne({resetPasswordToken:token, resetPasswordExpires:{$gt: Date.now()}})
+
+        if(!user){
+            return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({message : RESPONSE_MESSAGES.USER_TOKEN_INVALID})
+        }
+        const hashingPassword = await hashPassword(newPassword)
+        user.password = hashingPassword
+        user.resetPasswordToken = undefined 
+        user.resetPasswordExpires = undefined
+
+        await user.save()
+
+        return res.status(HTTP_STATUS_CODES.OK).json({message : RESPONSE_MESSAGES.USER_PASSWORD_RESET_SUCCESS})
+    }catch(error){
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).JSON({message : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
+    }
+}

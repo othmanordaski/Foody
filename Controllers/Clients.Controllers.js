@@ -10,7 +10,7 @@ const crypto = require('crypto')
 //Register
 exports.registerUser = async (req,res) => {
     try{
-        const {username,email,password,age,clientAddress,country,sex,phoneNumber,bio,verified} = req.body
+        const {username,email,password,age,clientAddress,phoneNumber,verified} = req.body
         const user = await User.findOne({email :email})
         if(user){
             return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({message: RESPONSE_MESSAGES.USER_ALREADY_EXIST})
@@ -22,10 +22,7 @@ exports.registerUser = async (req,res) => {
             password : hashedPassword,
             age ,
             clientAddress,
-            country ,
-            sex ,
             phoneNumber ,
-            bio,
             verified
         })
         const result = await newUser.save()

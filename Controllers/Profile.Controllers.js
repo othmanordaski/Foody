@@ -14,10 +14,8 @@ exports.profileUser = async (req,res) => {
             username : user.username,
             email : user.email,
             age : user.age,
-            country : user.country,
-            sex : user.sex,
+            clientAddress : user.clientAddress,
             phoneNumber : user.phoneNumber,
-            bio : user.bio
         }
         res.status(HTTP_STATUS_CODES.OK).json(fields)
 
@@ -30,7 +28,7 @@ exports.profileUser = async (req,res) => {
 exports.UpdateProfile = async (req, res) => {
     try {
         const id = req.user._id;
-        const { username, email, password, age, country, sex, phoneNumber, bio } = req.body;
+        const { username, email, password, age, clientAddress, phoneNumber } = req.body;
 
         const userfound = await User.findById(id);
         if (!userfound) {
@@ -53,10 +51,8 @@ exports.UpdateProfile = async (req, res) => {
             username,
             email,
             age,
-            country,
-            sex,
+            clientAddress,
             phoneNumber,
-            bio
         };
 
         if (hashedPassword) {
@@ -66,7 +62,7 @@ exports.UpdateProfile = async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate(id, updateFields, { new: true });
 
         res.json({
-            message: 'Profile updated successfully',
+            message: RESPONSE_MESSAGES.USER_UPDATED_SUCCESS,
         });
     } catch (error) {
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR);

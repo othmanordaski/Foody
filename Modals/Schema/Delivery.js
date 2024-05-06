@@ -25,11 +25,9 @@ const DeliveryPerson = mongoose.Schema({
     vehicleType: { 
         type: 'string', 
         enum: ['car', 'moto'],
-        required: true 
     },
     vehiclePlateNumber: { 
         type: 'string',
-        required: true 
     },
     status: {
         type: 'string', 
@@ -50,6 +48,12 @@ const DeliveryPerson = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'orders', 
         required: true
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
     },
     joinedDate: { 
         type: 'date', 

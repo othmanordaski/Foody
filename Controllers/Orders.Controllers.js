@@ -33,6 +33,7 @@ exports.createOrder = async (req,res) => {
 //Get All Orders
 exports.getAllOrders = async (req,res) => {
     try{
+        const {_id} = req.user
         const orders = await Order.find()
         res.status(HTTP_STATUS_CODES.OK).send(orders)
     }catch(error){
@@ -43,6 +44,7 @@ exports.getAllOrders = async (req,res) => {
 //Get Order by ID
 exports.getOrderById = async (req,res) => {
     try{
+        const {_id} = req.user
         const orderId = req.params.id
         const order = await Order.findById(orderId)
 

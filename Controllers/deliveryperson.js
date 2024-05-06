@@ -15,7 +15,7 @@ exports.RegisterDelivery = async (req,res)=>{
         if(deliverperson){
             return res.status(400).json({message:RESPONSE_MESSAGES.DELIVER_ALREADY_EXIST})
         }
-        const{username,password,phoneNumber,address,vehicleType,vehiclePlateNumber,status,rating,joinedDate}= req.body
+        const{username,password,phoneNumber,address,vehicleType,vehiclePlateNumber,status,rating}= req.body
         const hashedPassword = await hashPassword(password)
         const newUser = new DeliveryPerson({
             username,
@@ -26,8 +26,7 @@ exports.RegisterDelivery = async (req,res)=>{
             phoneNumber ,
             vehiclePlateNumber,
             status,
-            rating,
-            joinedDate
+            rating
         })
         const result = await newUser.save()
         const token = await new Token({

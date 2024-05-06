@@ -8,7 +8,8 @@ const {
     userLogout
     } = require('../Controllers/Clients.Controllers')
 
-const {profileUser,
+const {
+    profileUser,
     UpdateProfile,
     deleteProfile,
     forgotPassword,
@@ -77,15 +78,16 @@ routes.route('/reset-password/:token')
 
 //Create order
 routes.post('/create-order/:id/:menuid',isAuthenticated,checkPermission('createOrder'),createOrder)
+
 //All Orders 
 routes.get('/orders',isAuthenticated,checkPermission('viewOrders'),getAllOrders)
+
 //Order details, update and delete
 routes.route('/orders/:id')
 .get(isAuthenticated,checkPermission('viewOrders'),getOrderById)
+.get(isAuthenticated,checkPermission('viewOrders'),getDeliveryDetails)
 .patch(isAuthenticated,checkPermission('updateOrder'),updateOrder)
 .delete(isAuthenticated,checkPermission('deleteOrder'),deleteOrder)
 
-//Tracking Order
-//routes.get('/orders/track',isAuthenticated, checkPermission('trackOrder'),trackOrder)
 
 module.exports = routes

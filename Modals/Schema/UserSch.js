@@ -22,15 +22,8 @@ const User = mongoose.Schema({
         type : 'String',
         required : true
     },
-    sex : {
-        type: 'String' ,
-        enum: ['male', 'female'] 
-    },
     phoneNumber : {
         type: 'Number'
-    },
-    bio : {
-        type: 'String'
     },
     verified : {
         type : 'Boolean' ,
