@@ -34,20 +34,18 @@ const DeliveryPerson = mongoose.Schema({
         enum: ['available', 'busy', 'offline'], 
         //required: true
     },
-    rating: { 
-        type: 'number', 
-        min: 0, 
-        max: 5 
-    },
     role : {
         type : String,
         enum: ['Admin', 'Client', 'Restaurant','Delivery'],
         default : 'Delivery'
     },
+    verified : {
+        type : 'Boolean' ,
+        default : false
+    } ,
     assignedOrder: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'orders', 
-        required: true
+        ref: 'orders'
     },
     resetPasswordToken: {
         type: String

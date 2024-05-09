@@ -20,7 +20,6 @@ const User = mongoose.Schema({
     },
     clientAddress: {
         type : 'String',
-        required : true
     },
     phoneNumber : {
         type: 'Number'

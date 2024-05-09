@@ -15,7 +15,7 @@ exports.RegisterDelivery = async (req,res)=>{
         if(deliverperson){
             return res.status(400).json({message:RESPONSE_MESSAGES.DELIVER_ALREADY_EXIST})
         }
-        const{username,password,phoneNumber,address,vehicleType,vehiclePlateNumber,status,rating}= req.body
+        const{username,password,phoneNumber,address,vehicleType,vehiclePlateNumber,status}= req.body
         const hashedPassword = await hashPassword(password)
         const newUser = new DeliveryPerson({
             username,
@@ -25,8 +25,7 @@ exports.RegisterDelivery = async (req,res)=>{
             vehicleType,
             phoneNumber ,
             vehiclePlateNumber,
-            status,
-            rating
+            status
         })
         const result = await newUser.save()
         const token = await new Token({
@@ -46,10 +45,10 @@ exports.RegisterDelivery = async (req,res)=>{
 //To Verify Email Address
 exports.verifyEmail = async (req,res) => {
     try{
-        const token = req.params.token
+        const verToken = req.params.token
         const userToken = await Token.findOne({
             userId : req.params.id,
-            token : token
+            token : verToken
         })
 
         if(!userToken){
@@ -61,11 +60,12 @@ exports.verifyEmail = async (req,res) => {
             }else if(user.verified){
                 return res.status(HTTP_STATUS_CODES.OK).send({message: RESPONSE_MESSAGES.ALREADY_VERIFIED})
             }else{
-                const updated = await DeliveryPerson.updateOne({verified:true})
+                const updated = await user.updateOne({verified:true})
 
                 if(!updated){
                     return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message: RESPONSE_MESSAGES.FAILURE})
                 }else{
+                    const deleteToken = await Token.deleteOne({token : verToken})
                     return res.status(HTTP_STATUS_CODES.OK).send({message :RESPONSE_MESSAGES.VERIFIED_SUCCESS})
                 }
             }

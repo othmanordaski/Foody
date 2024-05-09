@@ -11,9 +11,6 @@ const Order = new mongoose.Schema({
             type: Number,
             required: true,
             min: 1
-        },
-        variation: {
-            type: String // You can adjust this based on your variation schema
         }
     }],
     total: {

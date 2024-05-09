@@ -9,7 +9,6 @@ exports.RegisterValidate = [
         body('vehicleType').isString().isIn(['car', 'moto']).notEmpty(),
         body('vehiclePlateNumber').isString().notEmpty(),
         body('status').optional().isString().isIn(['available', 'busy', 'offline']),
-        body('rating').optional().isNumeric().isFloat({ min: 0, max: 5 }),
         body('role').optional().isString().isIn(['Admin', 'Client', 'Restaurant', 'Delivery']),
 ]
 

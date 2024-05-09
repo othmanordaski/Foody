@@ -15,7 +15,7 @@ exports.sendEmailVerification = async (mail,userId,token) => {
         to: mail,
         subject: "Verify your email address",
         text : `Please click the confirmation link.
-        http://localhost:3000/client/verify/:${userId}/:${token}`
+        http://localhost:5173/client/verify/${userId}/${token}`
       };
 
       transporter.sendMail(mailOptions, function(error, info) {

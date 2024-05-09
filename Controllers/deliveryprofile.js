@@ -1,5 +1,6 @@
 const User = require('../Modals/Schema/Delivery')
 const {hashPassword,comparePassword} = require('../Helpers/Hashing')
+const {HTTP_STATUS_CODES,RESPONSE_MESSAGES} = require('../config/constants')
 const {sendPaawordResetMail} = require('../Helpers/mailer')
 
 exports.DeliveryProfile = async (req,res) => {
@@ -7,7 +8,7 @@ exports.DeliveryProfile = async (req,res) => {
         const id = req.user._id
         const user =await User.findById({_id:id})
     if (!user){
-        req.status(400).res('user not found')
+        req.status(HTTP_STATUS_CODES.BAD_REQUEST).res({message: RESPONSE_MESSAGES.DELIVERY_NOT_FOUND})
     }
     const profile = {
         username:user.username,
@@ -18,7 +19,7 @@ exports.DeliveryProfile = async (req,res) => {
     res.status(200).json(profile)
 
     }catch(error){
-        res.status(500).send('Server Error');
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({mesaage : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR});
     }
 }
 
@@ -27,11 +28,12 @@ exports.UpdateProfile = async(req,res) => {
     // const id = req.params.id
     const {_id}=req.user
     const iduser = _id
-    const{username,email,password,phoneNumber,address,vehicleType,vehiclePlateNumber,status,rating,joinedDate}=req.body
+    const{username,email,password,phoneNumber,address,vehicleType,vehiclePlateNumber,status}=req.body
     const existinguser = await User.findById({_id : iduser})
     const verifypassword = await comparePassword(password , existinguser.password)
     if(verifypassword){
-    res.status(404).send('password existing')}
+        res.status(404).send('password existing')
+    }
     const hashedPassword = await hashPassword(password)
     const newprofile = await User.updateOne({_id : iduser}, 
         {username,
@@ -41,8 +43,8 @@ exports.UpdateProfile = async(req,res) => {
         address,
         vehicleType,
         vehiclePlateNumber,
-        status,
-        rating})
+        status
+    })
     res.status(200).send('profile updated')
 }catch(error){
     res.status(500).send('Server Error');

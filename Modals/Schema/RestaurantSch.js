@@ -32,7 +32,14 @@ const restaurantSchema = new mongoose.Schema({
         type : String,
         enum: ['Admin', 'Client', 'Restaurant','Delivery'],
         default: 'Restaurant'
+    }, 
+    image : {
+        type: String,
     },
+    verified : {
+        type : 'Boolean' ,
+        default : false
+    } ,
     resetPasswordToken: {
         type: String
     },

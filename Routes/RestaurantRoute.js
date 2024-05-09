@@ -45,7 +45,7 @@ router.route('/profile')
 
 //Edit profile
 router.route('/profile/edit/:id')
-.patch(checkPermission("manageRestaurantInfo"),updateRestaurantProfile)
+.patch(checkPermission("manageRestaurantInfo"),uploadImage,updateRestaurantProfile)
 
 //Delete profile
 router.route('/profile/delete/:id')
@@ -61,7 +61,7 @@ router.route('/reset-password/:token')
 
 //Route for menus
 router.route('/menu')
-.get(checkPermission("manageRestaurantInfo"),getAllMenus)
+.get(getAllMenus)
 .post(isAuthenticated,checkPermission("manageRestaurantInfo"),uploadImage,createMenu)
 
 router.route('/menu/:id')

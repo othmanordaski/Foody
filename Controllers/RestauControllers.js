@@ -11,13 +11,13 @@ const {sendPaawordResetMail} = require('../Helpers/mailer')
 // Controller to register a new restaurant
 exports.registerRestaurant = async (req, res) => {
     try {
-        const { name, email, password, address, phoneNumber, openingHours, menu, role } = req.body;
-
+        const { name, email, password, address, phoneNumber, role } = req.body;
+        console.log('here',req.body);
         const existingRestaurant = await Restaurant.findOne({ email });
+        console.log(existingRestaurant)
         if (existingRestaurant) {
             return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ message: RESPONSE_MESSAGES.RESTAU_ALREADY_EXIST });
         }
-
         const hashedPassword = await hashPassword(password);
 
         const newRestaurant = new Restaurant({ 
@@ -25,9 +25,7 @@ exports.registerRestaurant = async (req, res) => {
             email, 
             password: hashedPassword,
             address, 
-            phoneNumber, 
-            openingHours, 
-            menu ,
+            phoneNumber,
             role
         });
 
@@ -42,6 +40,7 @@ exports.registerRestaurant = async (req, res) => {
         }
         res.status(HTTP_STATUS_CODES.OK).send(RESPONSE_MESSAGES.RESTAU_CREATED_SUCCESS);
     } catch (error) {
+        console.log(error)
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send(RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR);
     }
 };
@@ -49,10 +48,10 @@ exports.registerRestaurant = async (req, res) => {
 //To Verify Email Address
 exports.verifyEmail = async (req,res) => {
     try{
-        const token = req.params.token
+        const verToken = req.params.token
         const userToken = await Token.findOne({
             userId : req.params.id,
-            token : token
+            token : verToken
         })
 
         if(!userToken){
@@ -64,11 +63,12 @@ exports.verifyEmail = async (req,res) => {
             }else if(user.verified){
                 return res.status(HTTP_STATUS_CODES.OK).send({message: RESPONSE_MESSAGES.ALREADY_VERIFIED})
             }else{
-                const updated = await Restaurant.updateOne({verified:true})
+                const updated = await user.updateOne({verified:true})
 
                 if(!updated){
                     return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message: RESPONSE_MESSAGES.FAILURE})
                 }else{
+                    const deleteToken = await Token.deleteOne({token : verToken})
                     return res.status(HTTP_STATUS_CODES.OK).send({message :RESPONSE_MESSAGES.VERIFIED_SUCCESS})
                 }
             }
@@ -120,6 +120,7 @@ exports.getRestaurantProfile = async (req, res) => {
             phoneNumber : restaurantProfile.phoneNumber,
             openingHours : restaurantProfile.openingHours,
             menu : restaurantProfile.menu,
+            image: restaurantProfile.image,
             role: restaurantProfile.role,
         }
         res.status(HTTP_STATUS_CODES.OK).json(fieldsToView);
@@ -131,6 +132,7 @@ exports.getRestaurantProfile = async (req, res) => {
 // Controller to update restaurant profile by ID
 exports.updateRestaurantProfile = async (req, res) => {
     try {
+        const {filename} = req.file
         const ownerId = req.params.id;
 
         // Find the existing restaurant
@@ -146,13 +148,14 @@ exports.updateRestaurantProfile = async (req, res) => {
             address: req.body.address || existingOwner.address,
             phoneNumber: req.body.phoneNumber || existingOwner.phoneNumber,
             openingHours: req.body.openingHours || existingOwner.openingHours,
+            image: filename || existingOwner.image 
         };
 
         // Check if a new password is provided
         if (req.body.password) {
-            const passwordMatch = await bcrypt.compare(req.body.password, existingOwner.password);
+            const passwordMatch = await comparePassword(req.body.password, existingOwner.password);
             if (!passwordMatch) {
-                updatedData.password = await bcrypt.hash(req.body.password, 10);
+                updatedData.password = await hashPassword(req.body.password, 10);
             }
         }
 

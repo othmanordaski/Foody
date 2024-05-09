@@ -1,18 +1,16 @@
 {
   "name": "foody",
   "version": "1.0.0",
-
   "description": "🍽️ Foody: Triple Registry Triple Login Website\r Introduction",
   "main": "server.js",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
   },
-
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.1.0",
     "cookie-parser": "^1.4.6",
@@ -28,9 +26,9 @@
     "nodemailer": "^6.9.13",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
+    "sharp": "^0.33.3",
     "uuid": "^9.0.1",
     "validator": "^13.11.0",
-    "sharp": "^0.33.3",
     "xss": "^1.0.15"
   },
   "keywords": [],

@@ -33,7 +33,7 @@ exports.createMenu = async (req, res) => {
         const {_id,role}=req.user
         if(role == 'Restaurant'){
         const {filename} = req.file
-        const {name, description, price, category, variations, dietary, reviews ,isPublished} = req.body;
+        const {name, description, price, category ,isPublished} = req.body;
         const menu = new Menu({
             name,
             description,
@@ -41,10 +41,7 @@ exports.createMenu = async (req, res) => {
             category,
             image : filename,
             isPublished: isPublished,
-            variations,
             ownerId:_id ,
-            dietary,
-            reviews,
         });
         const createdMenu = await menu.save();
         if (!createdMenu) {
@@ -67,7 +64,7 @@ exports.updateMenu = async (req, res) => {
             const menuFound = await Menu.findById(id) 
             if(menuFound.ownerId == _id) {
                 const { filename } = req.file;
-                const { name, description, price, category, variations, dietary, reviews, isPublished } = req.body;
+                const { name, description, price, category, isPublished } = req.body;
                 const updatedMenu = await Menu.findByIdAndUpdate(id, {
                     name,
                     description,
@@ -75,9 +72,6 @@ exports.updateMenu = async (req, res) => {
                     category,
                     image: filename,
                     isPublished: isPublished,
-                    variations,
-                    dietary,
-                    reviews
                 }, { new: true });
                 if (!updatedMenu) {
                     return res.status(HTTP_STATUS_CODES.NOT_FOUND).json({ message: RESPONSE_MESSAGES.MENU_ITEM_NOT_FOUND });

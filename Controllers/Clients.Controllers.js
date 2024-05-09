@@ -6,6 +6,7 @@ const {sendEmailVerification} = require('../Helpers/mailverify')
 const {hashPassword,comparePassword} = require('../Helpers/Hashing')
 const {generateToken} = require('../Helpers/JWT')
 const crypto = require('crypto')
+const { LeftCircleFilled } = require('@ant-design/icons')
 
 //Register
 exports.registerUser = async (req,res) => {
@@ -43,10 +44,10 @@ exports.registerUser = async (req,res) => {
 //To Verify Email Address
 exports.verifyEmail = async (req,res) => {
     try{
-        const token = req.params.token
+        const verToken = req.params.token
         const userToken = await Token.findOne({
             userId : req.params.id,
-            token : token
+            token : verToken
         })
 
         if(!userToken){
@@ -58,11 +59,12 @@ exports.verifyEmail = async (req,res) => {
             }else if(user.verified){
                 return res.status(HTTP_STATUS_CODES.OK).send({message: RESPONSE_MESSAGES.ALREADY_VERIFIED})
             }else{
-                const updated = await User.updateOne({verified:true})
+                const updated = await user.updateOne({verified:true})
 
                 if(!updated){
                     return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message: RESPONSE_MESSAGES.FAILURE})
                 }else{
+                    const deleteToken = await Token.deleteOne({token : verToken})
                     return res.status(HTTP_STATUS_CODES.OK).send({message :RESPONSE_MESSAGES.VERIFIED_SUCCESS})
                 }
             }

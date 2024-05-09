@@ -2,6 +2,7 @@ const Order = require("../Modals/Schema/OrderSchema")
 const DeliveryPerson = require('../Modals/Schema/Delivery')
 const {HTTP_STATUS_CODES,RESPONSE_MESSAGES} = require('../config/constants')
 const { response } = require("express")
+const {calculateDistance} = require("../Helpers/calculateDistance")
 
 
 //Create a new order by the client ofc
@@ -106,14 +107,12 @@ exports.assignDelivery = async (req,res) => {
         if(!order){
             return res.status(HTTP_STATUS_CODES.NOT_FOUND).send({message : RESPONSE_MESSAGES.ORDER_NOT_FOUND})
         }
-        console.log(req.user)
         const delivery = await DeliveryPerson.findByIdAndUpdate(_id,{
             status : 'Assigned',
             assignedOrder : orderId   
         },{new:true})
         res.status(HTTP_STATUS_CODES.OK).send({message: delivery})
     }catch(error){
-        console.log(error)
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({messsage: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR})
     }
 }
@@ -126,8 +125,37 @@ exports.getDeliveryDetails = async (req, res) => {
         if (!delivery) {
             return res.status(HTTP_STATUS_CODES.NOT_FOUND).send({ error: RESPONSE_MESSAGES.DELIVERY_NOT_FOUND });
         }
-        res.status(200).send(delivery);
+        const deliveryDetail = {
+            name : delivery.username,
+            email : delivery.email,
+            phoneNumber : delivery.phoneNumber,
+            address : delivery.address,
+            status : delivery.status
+        }
+        res.status(200).send(deliveryDetail);
     } catch (error) {
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 };
+
+exports.trackOrder = async (req,res) => {
+    try{
+        const orderId = req.params.id
+        const orderToTrack = await Order.find({orderId})
+        if(orderToTrack){
+            const clientAddress = req.user.clientAddress
+            //get the id of delivery
+            const deliveryAddress = delivery.address
+            //calculate distance
+            const distanceData = await calculateDistance(clientAddress,deliveryAddress)
+
+            res.status(HTTP_STATUS_CODES.OK).send({message : distanceData})
+        }else{
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).send({message : RESPONSE_MESSAGES.ORDER_NOT_FOUND})
+        }
+        
+        
+    }catch(error){
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
+    }
+}
