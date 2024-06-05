@@ -15,6 +15,7 @@ const {
     registerRestaurant,
     verifyEmail,
     restaurantLogin,
+    getAllRestaurants,
     getRestaurantProfile,
     updateRestaurantProfile,
     deleteRestaurantProfile,
@@ -39,9 +40,13 @@ router.route('/verify/:id/:token')
 router.route('/login')
 .post(LoginValidate,restaurantLogin)
 
+//Get all restaurants 
+router.route('/')
+.get(getAllRestaurants)
 //Profile
-router.route('/profile')
-.get(isAuthenticated,checkPermission("manageRestaurantInfo"),getRestaurantProfile)
+router.route('/profile/:id')
+.get(getRestaurantProfile)
+// .get(isAuthenticated,checkPermission("manageRestaurantInfo"),getRestaurantProfile)
 
 //Edit profile
 router.route('/profile/edit/:id')
