@@ -8,9 +8,9 @@ exports.getAllMenus = async (req, res) => {
         if (!menus || menus.length === 0) {
             return res.status(HTTP_STATUS_CODES.NOT_FOUND).json({ message: RESPONSE_MESSAGES.NO_MENU_ITEMS_AVAILABLE});
         }
-        res.json({ data: menus });
+        res.json(menus);
     } catch (err) {
-          res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 }
 
@@ -52,6 +52,7 @@ exports.createMenu = async (req, res) => {
             res.status(HTTP_STATUS_CODES.NOT_ALLOWED).json({message: RESPONSE_MESSAGES.MENU_NOT_ALLOWED})
         }
     } catch (err) {
+        console.log(err)
         return res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 }
