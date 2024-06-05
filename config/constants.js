@@ -83,7 +83,7 @@ exports.HTTP_STATUS_CODES = {
     RESTAU_UPDATED_SUCCESS: 'Restaurant updated successfully', // When a user is updated successfully
     RESTAU_CREATION_FAILED: 'Failed to register Restaurant', // When creating a user fails
     RESTAU_UPDATE_FAILED: 'Failed to update Restaurant', // When updating a user fails
-    RESTAU_NOT_FOUND: 'Failed to find restaurant', // When a restau is not found
+    RESTAU_NOT_FOUND: 'Failed to find restaurants', // When a restau is not found
     RESTAU_INVALID_PASSWORD : 'Invalid password', //When password is invalid
     RESTAU_DELETED_SUCCESS : 'Restaurant deleted successfully', // When a restau is deleted successfully
     RESTAU_INVALID_CREDENTIALS: 'Invalid credentials', // When credentials (username/email and password) are invalid
