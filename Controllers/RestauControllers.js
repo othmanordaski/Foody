@@ -125,9 +125,25 @@ exports.getRestaurantProfile = async (req, res) => {
         }
         res.status(HTTP_STATUS_CODES.OK).json(fieldsToView);
     } catch (error) {
+        console.log(error)
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
     }
 };
+
+exports.getRestaurantById = async (req,res) => {
+}
+
+exports.getAllRestaurants = async (req,res) => {
+    try {
+        const restaurants = await Restaurant.find();
+        if (!restaurants || restaurants.length === 0) {
+            return res.status(HTTP_STATUS_CODES.NOT_FOUND).json({ message: RESPONSE_MESSAGES.RESTAU_NOT_FOUND});
+        }
+        res.json(restaurants);
+    } catch (err) {
+        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ message: RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR });
+    }
+}
 
 // Controller to update restaurant profile by ID
 exports.updateRestaurantProfile = async (req, res) => {
