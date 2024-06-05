@@ -1,6 +1,6 @@
 const Menu = require('../Schema/MenuSchema');
 
-exports.findFilteredMenuItems = async (page = 1, limits = 5, sortBy = 'createdAt', order = 'asc', minPrice = 0, maxPrice = Infinity , category, search ) => {
+exports.findFilteredMenuItems = async (page = 1, limits = 10, sortBy = 'createdAt', order = 'asc', minPrice = 0, maxPrice = Infinity , category, search ) => {
   try {
       return await Menu.find({
               isPublished: true,
