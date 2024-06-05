@@ -6,7 +6,6 @@ const {sendEmailVerification} = require('../Helpers/mailverify')
 const {hashPassword,comparePassword} = require('../Helpers/Hashing')
 const {generateToken} = require('../Helpers/JWT')
 const crypto = require('crypto')
-const { LeftCircleFilled } = require('@ant-design/icons')
 
 //Register
 exports.registerUser = async (req,res) => {
@@ -87,7 +86,7 @@ exports.userLogin = async (req,res) => {
         if(!checked) return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({message: RESPONSE_MESSAGES.USER_WRONG_PASSWORD})
 
         const token = await generateToken(user)
-        res.status(HTTP_STATUS_CODES.OK).cookie('tokenAuth',token).send({message : RESPONSE_MESSAGES.USER_LOGGED_IN})
+        res.status(HTTP_STATUS_CODES.OK).cookie('tokenAuth',token).send({message : RESPONSE_MESSAGES.USER_LOGGED_IN, tokenAuth : token, user})
     }catch(error){
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).send({message : RESPONSE_MESSAGES.INTERNAL_SERVER_ERROR});
     }
