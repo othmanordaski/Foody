@@ -5,6 +5,7 @@ const {server} = require('./config/config');
 const PORT = server.PORT
 
 const express = require('express')
+const cors = require('cors')
 const app = express()
 
 const cookieParser = require('cookie-parser')
@@ -14,6 +15,7 @@ const {connection} = require('./config/database')
 const database = connection()
 
 //Middleware setup
+app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended : true}))
